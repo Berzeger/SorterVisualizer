@@ -10,6 +10,10 @@ public:
 	}
 
 	std::vector<T> sort(std::vector<T>& data) const {
+		if (m_sortAlgorithm == nullptr) {
+			return data;
+		}
+
 		return m_sortAlgorithm->sort(data);
 	}
 
@@ -18,6 +22,26 @@ public:
 			std::cout << elem << " ";
 		}
 		std::cout << std::endl;
+	}
+
+	void assignData(const std::vector<T>& data) const {
+		if (m_sortAlgorithm == nullptr) {
+			return;
+		}
+
+		m_sortAlgorithm->assignData(data);
+	}
+
+	void sortStep() {
+		if (m_sortAlgorithm == nullptr) {
+			return;
+		}
+
+		m_sortAlgorithm->sortStep();
+	}
+
+	const std::vector<T>& getData() const {
+		return m_sortAlgorithm->getData();
 	}
 
 private:
