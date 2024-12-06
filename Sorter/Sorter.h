@@ -44,6 +44,14 @@ public:
 		return m_sortAlgorithm->getData();
 	}
 
+	int getLastMovedIndex() const {
+		if (m_sortAlgorithm == nullptr) {
+			return -1;
+		}
+
+		return m_sortAlgorithm->getLastMovedIndex();
+	}
+
 private:
 	std::unique_ptr<Sort<T>> m_sortAlgorithm;
 };

@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 	const int kBarWidth = 20;
 	const int kWindowHeight = 600;
 	const int kWindowWidth = 800;
-	const float kDrawInterval = 0.005f;
+	const float kDrawInterval = 0.03f;
 
 	float timeSinceLastDraw = 0.f;
 
@@ -50,6 +50,9 @@ int main(int argc, char** argv)
 		for (size_t i = 0; i < nData; ++i) {
 			int barHeight = data[i] * 2 + 1;
 			sf::RectangleShape rectangle(sf::Vector2f(kBarWidth, barHeight));
+			if (sorter.getLastMovedIndex() == i) {
+				rectangle.setFillColor(sf::Color::Red);
+			}
 			rectangle.setPosition(sf::Vector2f(i * kBarWidth, kWindowHeight - barHeight));
 			window.draw(rectangle);
 		}

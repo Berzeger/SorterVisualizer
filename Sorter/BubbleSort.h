@@ -25,6 +25,7 @@ public:
 		m_data = data;
 		m_i = static_cast<int>(m_data.size());
 		m_j = 0;
+		m_lastMovedIndex = -1;
 		m_done = (m_i <= 1);
 	}
 
@@ -44,12 +45,22 @@ public:
 					if (frequency < 37) frequency = 37;   // Beep can't go below 37 Hz
 					if (frequency > 32767) frequency = 32767; // Beep max frequency
 
+					m_lastMovedIndex = m_j + 1;
 					// Beep for 100 ms
 					Beep(frequency, 30);
 				}
 				m_j++;
 			}
 			else {
+				m_lastMovedIndex = m_j;
+
+				int value = m_data[m_j]; // The number we just moved upwards
+				int frequency = 200 + (value * 20);
+				if (frequency < 37) frequency = 37;   // Beep can't go below 37 Hz
+				if (frequency > 32767) frequency = 32767; // Beep max frequency
+
+				// Beep for 100 ms
+				Beep(frequency, 30);
 				m_i--;
 				m_j = 0;
 			}
@@ -58,6 +69,7 @@ public:
 		// Check if we are done
 		if (m_i <= 1) {
 			m_done = true;
+			m_lastMovedIndex = -1;
 		}
 
 		return true;
@@ -67,8 +79,13 @@ public:
 		return m_data;
 	}
 
+	int getLastMovedIndex() const override {
+		return m_lastMovedIndex;
+	}
+
 private:
 	std::vector<T> m_data;
 	int m_i, m_j;
 	bool m_done;
+	int m_lastMovedIndex;
 };
