@@ -5,14 +5,14 @@
 #include "Sorter.h"
 #include "BubbleSort.h"
 #include <vector>
+#include <SDL.h>
 
-int main(int argc, char** argv) 
-{
-	const int kBarWidth = 20;
-	const int kWindowHeight = 600;
-	const int kWindowWidth = 800;
-	const float kDrawInterval = 0.03f;
+const int kBarWidth = 20;
+const int kWindowHeight = 600;
+const int kWindowWidth = 800;
+const float kDrawInterval = 0.03f;
 
+void SFML() {
 	float timeSinceLastDraw = 0.f;
 
 	sf::RenderWindow window(sf::VideoMode(kWindowWidth, kWindowHeight), "My window");
@@ -21,14 +21,14 @@ int main(int argc, char** argv)
 	std::vector<int> arr = { 67, 53, 88, 34, 61, 151, 192, 142, 66, 243, 27, 223, 194, 223, 38, 242, 48, 21, 237, 77, 224, 146, 101, 74, 8, 127, 119, 128, 48, 132, 83, 15, 18, 37, 28, 8, 94, 72, 93, 217 };
 	Sorter<int> sorter;
 	std::unique_ptr<Sort<int>> bubbleSort = std::make_unique<BubbleSort<int>>();
-	
+
 	sorter.setSortAlgorithm(std::move(bubbleSort));
 	sorter.assignData(arr);
 
 	while (window.isOpen()) {
 		sf::Event event;
 		//std::cout << "delta time = " << deltaClock.restart().asSeconds() << std::endl;
-		
+
 		while (window.pollEvent(event)) {
 
 			if (event.type == sf::Event::Closed) {
@@ -63,4 +63,35 @@ int main(int argc, char** argv)
 
 	//sorter.sort(arr);
 	sorter.print(arr);
+}
+
+int SDL() {
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+		std::cout << "Failed to initialize SDL" << std::endl;
+		return -1;
+	}
+
+	SDL_Window* window = SDL_CreateWindow("My SDL Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, kWindowWidth, kWindowHeight, 0);
+
+	if (!window) {
+		std::cout << "Failed to create window" << std::endl;
+		return -1;
+	}
+
+	SDL_Surface* windowSurface = SDL_GetWindowSurface(window);
+
+	if (!windowSurface) {
+		std::cout << "Failed to get the surface from the window" << std::endl;
+		return -1;
+	}
+
+	SDL_UpdateWindowSurface(window);
+	SDL_Delay(5000);
+	return 0;
+}
+
+int main(int argc, char** argv) 
+{
+	//SFML();
+	return SDL();
 }
