@@ -1,7 +1,7 @@
 #include "Application.h"
 #include <iostream>
 
-Application::Application()
+Application::Application() : m_window(), m_windowEvent(), m_windowSurface()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		std::cout << "Failed to initialize SDL" << std::endl;

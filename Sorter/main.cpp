@@ -7,15 +7,15 @@
 #include <vector>
 #include "Application.h"
 
-const int kBarWidth = 20;
-const int kWindowHeight = 600;
-const int kWindowWidth = 800;
+const float kBarWidth = 20.f;
+const float kWindowHeight = 600.f;
+const float kWindowWidth = 800.f;
 const float kDrawInterval = 0.03f;
 
 void SFML() {
 	float timeSinceLastDraw = 0.f;
 
-	sf::RenderWindow window(sf::VideoMode(kWindowWidth, kWindowHeight), "My window");
+	sf::RenderWindow window(sf::VideoMode(static_cast<unsigned int>(kWindowWidth), static_cast<unsigned int>(kWindowHeight)), "My window");
 	sf::Clock deltaClock;
 
 	std::vector<int> arr = { 67, 53, 88, 34, 61, 151, 192, 142, 66, 243, 27, 223, 194, 223, 38, 242, 48, 21, 237, 77, 224, 146, 101, 74, 8, 127, 119, 128, 48, 132, 83, 15, 18, 37, 28, 8, 94, 72, 93, 217 };
