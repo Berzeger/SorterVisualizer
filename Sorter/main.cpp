@@ -49,7 +49,7 @@ void SFML() {
 		size_t nData = data.size();
 		for (size_t i = 0; i < nData; ++i) {
 			int barHeight = data[i] * 2 + 1;
-			sf::RectangleShape rectangle(sf::Vector2f(kBarWidth, barHeight));
+			sf::RectangleShape rectangle(sf::Vector2f(kBarWidth, static_cast<float>(barHeight)));
 			if (sorter.getLastMovedIndex() == i) {
 				rectangle.setFillColor(sf::Color::Red);
 			}
@@ -72,7 +72,7 @@ void SDL() {
 
 int main(int argc, char** argv) 
 {
-	//SFML();
-	SDL();
+	SFML();
+	//SDL();
 	return 0;
 }

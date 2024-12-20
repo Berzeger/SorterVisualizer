@@ -8,9 +8,9 @@ template <class T>
 class BubbleSort : public Sort<T> {
 public:
 	std::vector<T> sort(std::vector<T>& data) override {
-		int nData = static_cast<int>(data.size());
+		m_i = data.size();
 
-		for (m_i = nData; m_i >= 0; --m_i) {
+		for (; m_i > 0; --m_i) {
 			for (m_j = 0; m_j < m_i - 1; ++m_j) {
 				if (data[m_j] > data[m_j + 1]) {
 					std::swap(m_data[m_j], m_data[m_j + 1]);
@@ -23,7 +23,7 @@ public:
 
 	void assignData(const std::vector<T>& data) override {
 		m_data = data;
-		m_i = static_cast<int>(m_data.size());
+		m_i = m_data.size();
 		m_j = 0;
 		m_lastMovedIndex = -1;
 		m_done = (m_i <= 1);
@@ -79,13 +79,13 @@ public:
 		return m_data;
 	}
 
-	int getLastMovedIndex() const override {
+	size_t getLastMovedIndex() const override {
 		return m_lastMovedIndex;
 	}
 
 private:
 	std::vector<T> m_data;
-	int m_i, m_j;
+	size_t m_i, m_j;
 	bool m_done;
-	int m_lastMovedIndex;
+	size_t m_lastMovedIndex;
 };

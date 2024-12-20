@@ -44,7 +44,7 @@ public:
 		return m_sortAlgorithm->getData();
 	}
 
-	int getLastMovedIndex() const {
+	size_t getLastMovedIndex() const {
 		if (m_sortAlgorithm == nullptr) {
 			return -1;
 		}
