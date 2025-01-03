@@ -2,10 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <iostream>
-#include "Sorter.h"
-#include "BubbleSort.h"
+#include "sorter.h"
+#include "bubble_sort.h"
 #include <vector>
-#include "Application.h"
+#include "application.h"
 
 const float kBarWidth = 20.f;
 const float kWindowHeight = 600.f;

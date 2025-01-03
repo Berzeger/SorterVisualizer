@@ -1,4 +1,4 @@
-#include "Application.h"
+#include "application.h"
 #include <iostream>
 
 Application::Application() : m_window(), m_windowSurface()

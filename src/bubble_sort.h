@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Sort.h"
+#include "sort.h"
 
 #include <windows.h>
 
