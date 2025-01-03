@@ -4,7 +4,8 @@
 #include <iostream>
 
 template <class T>
-class Sort {
+class Sort
+{
 public:
 	virtual ~Sort() = default;
 	virtual std::vector<T> sort(std::vector<T>& data) = 0;

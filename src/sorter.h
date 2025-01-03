@@ -3,49 +3,62 @@
 #include "sort.h"
 
 template <class T>
-class Sorter {
+class Sorter
+{
 public:
-	void setSortAlgorithm(std::unique_ptr<Sort<T>> sortAlgorithm) {
+	void setSortAlgorithm(std::unique_ptr<Sort<T>> sortAlgorithm)
+	{
 		m_sortAlgorithm = std::move(sortAlgorithm);
 	}
 
-	std::vector<T> sort(std::vector<T>& data) const {
-		if (m_sortAlgorithm == nullptr) {
+	std::vector<T> sort(std::vector<T>& data) const
+	{
+		if (!m_sortAlgorithm)
+		{
 			return data;
 		}
 
 		return m_sortAlgorithm->sort(data);
 	}
 
-	void print(const std::vector<T>& data) const {
-		for (T elem : data) {
+	void print(const std::vector<T>& data) const
+	{
+		for (T elem : data)
+		{
 			std::cout << elem << " ";
 		}
 		std::cout << std::endl;
 	}
 
-	void assignData(const std::vector<T>& data) const {
-		if (m_sortAlgorithm == nullptr) {
+	void assignData(const std::vector<T>& data) const
+	{
+		if (!m_sortAlgorithm)
+		{
 			return;
 		}
 
 		m_sortAlgorithm->assignData(data);
 	}
 
-	void sortStep() {
-		if (m_sortAlgorithm == nullptr) {
+	void sortStep()
+	{
+		if (!m_sortAlgorithm)
+		{
 			return;
 		}
 
 		m_sortAlgorithm->sortStep();
 	}
 
-	const std::vector<T>& getData() const {
+	const std::vector<T>& getData() const
+	{
 		return m_sortAlgorithm->getData();
 	}
 
-	size_t getLastMovedIndex() const {
-		if (m_sortAlgorithm == nullptr) {
+	size_t getLastMovedIndex() const
+	{
+		if (!m_sortAlgorithm)
+		{
 			return -1;
 		}
 

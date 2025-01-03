@@ -1,16 +1,15 @@
 #pragma once
 
-#include <SDL.h>
-
-class Application {
+class Application
+{
 public:
-	Application();
-	~Application();
+	virtual ~Application() {};
 
-	void update();
-	void draw();
+	virtual void run() = 0;
 
-private:
-	SDL_Window* m_window;
-	SDL_Surface* m_windowSurface;
+protected:
+	virtual void init() = 0;
+	virtual void handleEvents() = 0;
+	virtual void update() = 0;
+	virtual void render() = 0;
 };
