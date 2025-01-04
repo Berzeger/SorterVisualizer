@@ -8,8 +8,27 @@ int main(int argc, char** argv)
 	SfmlApplication sfmlApp;
 	SdlApplication sdlApp;
 
-	//sfmlApp.run();
-	sdlApp.run();
+	Application* app;
+	int libChoice;
+	LIB_CHOICE:
+	std::cout << "Select library:\n1. SFML\n2. SDL\n";
+	std::cin >> libChoice;
 
-	return 0;
+	switch (libChoice)
+	{
+	case 1:
+		app = new SfmlApplication();
+		break;
+	case 2:
+		app = new SdlApplication();
+		break;
+	default:
+		std::cout << "Unrecognized choice.\n";
+		goto LIB_CHOICE;
+	}
+
+	app->run();
+	delete app;
+
+	return 0; // SDL requires the main function to return, even though standard C++ doesn't need it.
 }
