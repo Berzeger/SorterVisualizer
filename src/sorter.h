@@ -40,14 +40,14 @@ public:
 		m_sortAlgorithm->assignData(data);
 	}
 
-	void sortStep()
+	bool sortStep(T& sortedElem)
 	{
 		if (!m_sortAlgorithm)
 		{
-			return;
+			return false;
 		}
 
-		m_sortAlgorithm->sortStep();
+		return m_sortAlgorithm->sortStep(sortedElem);
 	}
 
 	const std::vector<T>& getData() const

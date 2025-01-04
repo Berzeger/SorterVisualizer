@@ -1,11 +1,18 @@
 // SFMLApplication.cpp
 #include "sfml_application.h"
 #include <iostream>
+#include <cmath>
+#include <chrono>
+#include <thread>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 const float kBarWidth = 20.f;
 const float kWindowHeight = 600.f;
 const float kWindowWidth = 800.f;
-const float kDrawInterval = 0.03f;
+const int kDrawInterval = 10;
 
 SfmlApplication::SfmlApplication() :
 	m_window(),
@@ -51,11 +58,19 @@ void SfmlApplication::handleEvents()
 
 void SfmlApplication::update()
 {
-	m_timeSinceLastDraw += m_deltaClock.restart().asSeconds();
-
+	float ms = m_deltaClock.restart().asMicroseconds() / 1000.f;
+	m_timeSinceLastDraw += ms;
+	std::cout << "ms = " << ms << ", m_timeSinceLastDraw = " << m_timeSinceLastDraw << "\n";
 	if (m_timeSinceLastDraw >= kDrawInterval)
 	{
-		m_sorter.sortStep();
+		int sortedElem;
+		if (m_sorter.sortStep(sortedElem))
+		{
+			int frequency = 200 + (sortedElem * 20);
+			if (frequency > 32767) frequency = 32767; // Beep max frequency
+			beep(frequency, kDrawInterval);
+		}
+		
 		m_timeSinceLastDraw = 0.f;
 	}
 }
@@ -85,4 +100,50 @@ void SfmlApplication::render()
 	}
 
 	m_window->display();
+}
+
+void SfmlApplication::beep(int frequency, int durationMs)
+{
+	const int sampleRate = 44100;
+	const int amplitude = 28000;
+	const int length = (sampleRate * durationMs) / 1000;
+
+	std::vector<sf::Int16> samples(length);
+	double phaseIncrement = (2.f * M_PI * frequency) / sampleRate;
+	double phase = 0.f;
+	int fadeSamples = sampleRate / 200; // 5 ms fade, prevents crackling
+	if (fadeSamples * 2 > length)
+	{
+		fadeSamples = length / 4;
+	}
+
+	for (int i = 0; i < length; ++i)
+	{
+		double envelope = 1.f;
+
+		// fade in
+		if (i < fadeSamples)
+		{
+			envelope = i / static_cast<double>(fadeSamples);
+		}
+		// fade out
+		else if (i > length - fadeSamples)
+		{
+			envelope = (length - i) / static_cast<double>(fadeSamples);
+		}
+
+		double sampleValue = envelope * amplitude * std::sin(phase);
+		samples[i] = static_cast<sf::Int16>(sampleValue);
+
+		phase += phaseIncrement;
+	}
+
+	if (!m_soundBuffer.loadFromSamples(samples.data(), samples.size(), 1, sampleRate))
+	{
+		std::cout << "[SFML] Failed to load sound buffer.\n";
+		return;
+	}
+
+	m_sound.setBuffer(m_soundBuffer);
+	m_sound.play();
 }

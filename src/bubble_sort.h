@@ -2,8 +2,6 @@
 
 #include "sort.h"
 
-#include <windows.h>
-
 template <class T>
 class BubbleSort : public Sort<T>
 {
@@ -35,7 +33,7 @@ public:
 		m_done = (m_i <= 1);
 	}
 
-	bool sortStep()
+	bool sortStep(T& sortedElem)
 	{
 		if (m_done)
 		{
@@ -51,28 +49,14 @@ public:
 				{
 					std::swap(m_data[m_j], m_data[m_j + 1]);
 
-					int value = m_data[m_j + 1]; // The number we just moved upwards
-					int frequency = 200 + (value * 20);
-					if (frequency < 37) frequency = 37;   // Beep can't go below 37 Hz
-					if (frequency > 32767) frequency = 32767; // Beep max frequency
-
+					sortedElem = m_data[m_j + 1]; // The number we just moved upwards
 					m_lastMovedIndex = m_j + 1;
-					// Beep for 100 ms
-					Beep(frequency, 30);
 				}
 				m_j++;
 			}
 			else
 			{
 				m_lastMovedIndex = m_j;
-
-				int value = m_data[m_j]; // The number we just moved upwards
-				int frequency = 200 + (value * 20);
-				if (frequency < 37) frequency = 37;   // Beep can't go below 37 Hz
-				if (frequency > 32767) frequency = 32767; // Beep max frequency
-
-				// Beep for 100 ms
-				Beep(frequency, 30);
 				m_i--;
 				m_j = 0;
 			}

@@ -7,6 +7,7 @@
 #include "bubble_sort.h"
 #include "application.h"
 #include <vector>
+#include <SFML/Audio.hpp>
 
 class SfmlApplication : public Application
 {
@@ -21,6 +22,7 @@ private:
 	void update() override;
 	void render() override;
 	void handleEvents() override;
+	void beep(int frequency, int durationMs) override;
 
 private:
 	std::unique_ptr<sf::RenderWindow> m_window;
@@ -29,4 +31,6 @@ private:
 
 	std::vector<int> m_data;
 	Sorter<int> m_sorter;
+	sf::SoundBuffer m_soundBuffer;
+	sf::Sound m_sound;
 };

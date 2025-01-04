@@ -10,6 +10,7 @@ int main(int argc, char** argv)
 
 	Application* app;
 	int libChoice;
+
 	LIB_CHOICE:
 	std::cout << "Select library:\n1. SFML\n2. SDL\n";
 	std::cin >> libChoice;
