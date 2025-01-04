@@ -8,8 +8,8 @@ int main(int argc, char** argv)
 	SfmlApplication sfmlApp;
 	SdlApplication sdlApp;
 
-	sfmlApp.run();
-	//sdlApp.run();
+	//sfmlApp.run();
+	sdlApp.run();
 
 	return 0;
 }

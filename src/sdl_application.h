@@ -2,6 +2,8 @@
 
 #include "application.h"
 #include <SDL.h>
+#include <vector>
+#include "sorter.h"
 
 class SdlApplication : public Application
 {
@@ -20,6 +22,10 @@ private:
 private:
 	bool keepWindowOpen;
 	SDL_Window* m_window;
-	SDL_Surface* m_windowSurface;
+	SDL_Renderer* m_renderer;
 	SDL_Event m_event;
+
+	std::vector<int> m_data;
+	Sorter<int> m_sorter;
+	float m_timeSinceLastDraw;
 };
