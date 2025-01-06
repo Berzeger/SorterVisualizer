@@ -2,6 +2,7 @@
 #include <iostream>
 #include "bubble_sort.h"
 #include "insertion_sort.h"
+#include "quick_sort.h"
 
 const int kWindowHeight = 600;
 const int kWindowWidth = 810;
@@ -46,7 +47,7 @@ SdlApplication::SdlApplication() :
 	m_barWidth(kWindowWidth / m_data.size())
 {
 	// Initialize sorter with BubbleSort algorithm
-	m_sorter.setSortAlgorithm(std::make_unique<InsertionSort<int>>());
+	m_sorter.setSortAlgorithm(std::make_unique<QuickSort<int>>());
 }
 
 SdlApplication::~SdlApplication()
@@ -178,6 +179,7 @@ void SdlApplication::update()
 			int frequency = 200 + (currentArr[m_sorter.getSwaps()[m_currentSnapshotIndex]] * 10);
 			if (frequency > 32767) frequency = 32767; // Beep max frequency
 			beep(frequency, kDrawInterval);
+			m_currentSnapshotIndex++;
 		}
 
 		m_timeSinceLastDraw = 0.f;
@@ -216,11 +218,6 @@ void SdlApplication::render()
 
 			SDL_RenderFillRect(m_renderer, &rect);
 		}
-	}
-
-	if (m_currentSnapshotIndex < snapshots.size() - 1 && !snapshots.empty())
-	{
-		m_currentSnapshotIndex++;
 	}
 
 	SDL_RenderPresent(m_renderer);

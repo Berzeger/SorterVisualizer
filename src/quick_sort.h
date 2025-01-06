@@ -24,7 +24,6 @@ public:
 		// Base case: This part will be executed till the starting index low is lesser than the ending index high
 		if (low < high)
 		{
-
 			// pi is Partitioning Index, arr[p] is now at right place
 			int pi = partition(vec, low, high);
 
@@ -45,7 +44,6 @@ public:
 
 		for (int j = low; j <= high - 1; j++)
 		{
-
 			// If current element is smaller than or
 			// equal to pivot
 			if (vec[j] <= pivot)

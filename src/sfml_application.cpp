@@ -14,7 +14,7 @@
 
 const float kWindowHeight = 600.f;
 const float kWindowWidth = 800.f;
-const int kDrawInterval = 3;
+const int kDrawInterval = 10;
 
 SfmlApplication::SfmlApplication() :
 	m_window(),
@@ -51,7 +51,7 @@ m_barWidth(kWindowWidth / m_data.size()),
 m_currentSnapshotIndex(0)
 {
 	// Initialize sorter with BubbleSort algorithm
-	m_sorter.setSortAlgorithm(std::make_unique<BubbleSort<int>>());
+	m_sorter.setSortAlgorithm(std::make_unique<QuickSort<int>>());
 }
 
 void SfmlApplication::run()
@@ -100,6 +100,7 @@ void SfmlApplication::update()
 			int frequency = 200 + (currentArr[m_sorter.getSwaps()[m_currentSnapshotIndex]] * 10);
 			if (frequency > 32767) frequency = 32767; // Beep max frequency
 			beep(frequency, kDrawInterval);
+			m_currentSnapshotIndex++;
 		}
 
 		m_timeSinceLastDraw = 0.f;
@@ -133,11 +134,6 @@ void SfmlApplication::render()
 			rectangle.setPosition(i * m_barWidth, kWindowHeight - barHeight);
 			m_window->draw(rectangle);
 		}
-	}
-
-	if (m_currentSnapshotIndex < snapshots.size() - 1 && !snapshots.empty())
-	{
-		m_currentSnapshotIndex++;
 	}
 
 	m_window->display();
