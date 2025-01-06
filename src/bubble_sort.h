@@ -26,10 +26,9 @@ public:
 
 	void assignData(const std::vector<T>& data) override
 	{
-		m_data = data;
+		Sort::assignData(data);
 		m_i = m_data.size();
 		m_j = 0;
-		m_lastMovedIndex = -1;
 		m_done = (m_i <= 1);
 	}
 
@@ -72,19 +71,7 @@ public:
 		return true;
 	}
 
-	const std::vector<T>& getData() const override
-	{
-		return m_data;
-	}
-
-	size_t getLastMovedIndex() const override
-	{
-		return m_lastMovedIndex;
-	}
-
 private:
-	std::vector<T> m_data;
 	size_t m_i, m_j;
 	bool m_done;
-	size_t m_lastMovedIndex;
 };

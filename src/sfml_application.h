@@ -33,4 +33,6 @@ private:
 	Sorter<int> m_sorter;
 	sf::SoundBuffer m_soundBuffer;
 	sf::Sound m_sound;
+
+	float m_barWidth;
 };
