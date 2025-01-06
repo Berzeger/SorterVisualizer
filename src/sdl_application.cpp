@@ -1,10 +1,11 @@
 #include "sdl_application.h"
 #include <iostream>
 #include "bubble_sort.h"
+#include "insertion_sort.h"
 
 const int kWindowHeight = 600;
 const int kWindowWidth = 810;
-const int kDrawInterval = 3;
+const int kDrawInterval = 10;
 
 SdlApplication::SdlApplication() :
 	m_window(),
@@ -45,7 +46,7 @@ SdlApplication::SdlApplication() :
 	m_barWidth(kWindowWidth / m_data.size())
 {
 	// Initialize sorter with BubbleSort algorithm
-	m_sorter.setSortAlgorithm(std::make_unique<BubbleSort<int>>());
+	m_sorter.setSortAlgorithm(std::make_unique<InsertionSort<int>>());
 }
 
 SdlApplication::~SdlApplication()
@@ -75,7 +76,7 @@ void SdlApplication::init()
 		return;
 	}
 
-	m_window = SDL_CreateWindow("My SDL Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
+	m_window = SDL_CreateWindow("My SDL Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, kWindowWidth, kWindowHeight, 0);
 
 	if (!m_window)
 	{
