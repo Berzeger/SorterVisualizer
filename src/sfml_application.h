@@ -14,7 +14,7 @@ public:
 	SfmlApplication();
 	~SfmlApplication() {}
 
-	void run() override;
+	void run(std::unique_ptr<Sort> sortAlgorithm) override;
 
 private:
 	void init() override;
@@ -29,7 +29,7 @@ private:
 	float m_timeSinceLastDraw;
 
 	std::vector<int> m_data;
-	Sorter<int> m_sorter;
+	Sorter m_sorter;
 	sf::SoundBuffer m_soundBuffer;
 	sf::Sound m_sound;
 

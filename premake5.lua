@@ -13,20 +13,22 @@ project "Sorter"
 
 	filter "system:windows"
 		postbuildcommands
-        	{
-            		{ "{COPY} dependencies/SDL-2.30.10/lib/x64/SDL2.dll bin/%{cfg.buildcfg}" },
+		{
+			{ "{COPY} dependencies/SDL-2.30.10/lib/x64/SDL2.dll bin/%{cfg.buildcfg}" },
 			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-graphics-2.dll bin/%{cfg.buildcfg}" },
 			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-system-2.dll bin/%{cfg.buildcfg}" },			
 			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-window-2.dll bin/%{cfg.buildcfg}" },
 			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-audio-2.dll bin/%{cfg.buildcfg}" }
-     		}
+		}
 
 	filter "configurations:Debug"
 		defines { "DEBUG" }
 		architecture "x64"
 		symbols "On"
+		cppdialect "C++latest"
 
 	filter "configurations:Release"
 		defines { "NDEBUG" }
 		architecture "x64"
 		optimize "On"
+		cppdialect "C++latest"

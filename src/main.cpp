@@ -2,6 +2,7 @@
 #include <vector>
 #include "sfml_application.h"
 #include "sdl_application.h"
+#include "sort_algorithm_registry.h"
 
 int main(int argc, char** argv)
 {
@@ -28,17 +29,31 @@ LIB_CHOICE:
 		goto LIB_CHOICE;
 	}
 
-//	int algorithmChoice;
-//ALG_CHOICE:
-//	std::cout << "Select sorting algorithm:\n1. Bubble sort\n2. Insertion sort\n";
-//	std::cin >> algorithmChoice;
-//	switch (algorithmChoice)
-//	{
-//	case 1:
-//		
-//	}
+	auto sortAlgorithmNames = SortAlgorithmRegistry::instance().getRegisteredNames();
+	
+SORT_ALGORITHM_CHOICE:
+	std::cout << "Select sorting algorithm:\n";
+	size_t nSortAlgorithms = sortAlgorithmNames.size();
+	for (size_t i = 0; i < nSortAlgorithms; ++i)
+	{
+		std::cout << i + 1 << ". " << sortAlgorithmNames[i] << "\n";
+	}
 
-	app->run();
+	int sortAlgorithmChoice;
+	std::cin >> sortAlgorithmChoice;
+
+	if (sortAlgorithmChoice < 1 || sortAlgorithmChoice > nSortAlgorithms)
+	{
+		std::cout << "Unrecognized choice.\n";
+		goto SORT_ALGORITHM_CHOICE;
+	}
+
+	std::string chosenName = sortAlgorithmNames[sortAlgorithmChoice - 1];
+
+	// create the algorithm
+	auto mySorter = SortAlgorithmRegistry::instance().createSortAlgorithm(chosenName);
+
+	app->run(std::move(mySorter));
 	delete app;
 
 	return 0; // SDL requires the main function to return, even though standard C++ doesn't need it.

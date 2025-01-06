@@ -7,6 +7,7 @@
 #include "bubble_sort.h"
 #include "quick_sort.h"
 #include "insertion_sort.h"
+#include "merge_sort.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -50,12 +51,11 @@ SfmlApplication::SfmlApplication() :
 m_barWidth(kWindowWidth / m_data.size()),
 m_currentSnapshotIndex(0)
 {
-	// Initialize sorter with BubbleSort algorithm
-	m_sorter.setSortAlgorithm(std::make_unique<QuickSort<int>>());
 }
 
-void SfmlApplication::run()
+void SfmlApplication::run(std::unique_ptr<Sort> sortAlgorithm)
 {
+	m_sorter.setSortAlgorithm(std::move(sortAlgorithm));
 	m_sorter.sort(m_data);
 	init();
 

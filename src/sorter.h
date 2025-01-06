@@ -1,17 +1,18 @@
 #pragma once
 
+#include <memory>
+#include <iostream>
 #include "sort.h"
 
-template <class T>
 class Sorter
 {
 public:
-	void setSortAlgorithm(std::unique_ptr<Sort<T>> sortAlgorithm)
+	void setSortAlgorithm(std::unique_ptr<Sort> sortAlgorithm)
 	{
 		m_sortAlgorithm = std::move(sortAlgorithm);
 	}
 
-	std::vector<T> sort(std::vector<T>& data) const
+	std::vector<int> sort(std::vector<int>& data) const
 	{
 		if (!m_sortAlgorithm)
 		{
@@ -21,16 +22,16 @@ public:
 		return m_sortAlgorithm->sort(data);
 	}
 
-	void print(const std::vector<T>& data) const
+	void print(const std::vector<int>& data) const
 	{
-		for (T elem : data)
+		for (int elem : data)
 		{
 			std::cout << elem << " ";
 		}
 		std::cout << std::endl;
 	}
 
-	const std::vector<std::vector<T>>& getSnapshots() const 
+	const std::vector<std::vector<int>>& getSnapshots() const
 	{
 		return m_sortAlgorithm->getSnapshots();
 	}
@@ -41,5 +42,5 @@ public:
 	}
 
 private:
-	std::unique_ptr<Sort<T>> m_sortAlgorithm;
+	std::unique_ptr<Sort> m_sortAlgorithm;
 };

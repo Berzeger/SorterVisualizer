@@ -1,14 +1,14 @@
 #pragma once
 #include "sort.h"
+#include "sort_algorithm_registry.h"
 
-template<class T>
-class InsertionSort : public Sort<T>
+class InsertionSort : public Sort
 {
 public:
-	std::vector<T> sort(std::vector<T>& data)
+	std::vector<int> sort(std::vector<int>& data)
 	{
-		getSnapshots().clear();
-		getSwaps().clear();
+		this->m_snapshots.clear();
+		this->m_swaps.clear();
 		int nData = data.size();
 		int i = 1;
 		while (i < nData)
@@ -17,8 +17,8 @@ public:
 			while (j > 0 && data[j - 1] > data[j])
 			{
 				std::swap(data[j], data[j - 1]);
-				getSnapshots().push_back(data);
-				getSwaps().push_back(data[j - 1]);
+				this->m_snapshots.push_back(data);
+				this->m_swaps.push_back(data[j]);
 				j--;
 			}
 			i++;
@@ -27,3 +27,5 @@ public:
 		return data;
 	}
 };
+
+REGISTER_SORT_ALGORITHM(InsertionSort, "Insertion Sort");

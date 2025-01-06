@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <vector>
 #include "sorter.h"
+#include "sort.h"
 
 class SdlApplication : public Application
 {
@@ -11,7 +12,7 @@ public:
 	SdlApplication();
 	~SdlApplication();
 
-	void run() override;
+	void run(std::unique_ptr<Sort> sortAlgorithm) override;
 
 private:
 	void init() override;
@@ -29,7 +30,7 @@ private:
 	SDL_Event m_event;
 
 	std::vector<int> m_data;
-	Sorter<int> m_sorter;
+	Sorter m_sorter;
 	float m_timeSinceLastDraw;
 	float m_timeLastFrame;
 	int m_audioDeviceId;

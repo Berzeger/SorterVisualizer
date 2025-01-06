@@ -1,16 +1,16 @@
 #pragma once
 
 #include "sort.h"
+#include "sort_algorithm_registry.h"
 
-template <class T>
-class BubbleSort : public Sort<T>
+class BubbleSort : public Sort
 {
 public:
-	std::vector<T> sort(std::vector<T>& data) override
+	std::vector<int> sort(std::vector<int>& data) override
 	{
 		int nData = data.size();
-		getSnapshots().clear();
-		getSwaps().clear();
+		this->m_snapshots.clear();
+		this->m_swaps.clear();
 
 		for (; nData > 0; --nData)
 		{
@@ -19,8 +19,8 @@ public:
 				if (data[j] > data[j + 1])
 				{
 					std::swap(data[j], data[j + 1]);
-					getSnapshots().push_back(data);
-					getSwaps().push_back(j + 1);
+					this->m_snapshots.push_back(data);
+					this->m_swaps.push_back(j + 1);
 				}
 			}
 		}
@@ -28,3 +28,5 @@ public:
 		return data;
 	}
 };
+
+REGISTER_SORT_ALGORITHM(BubbleSort, "Bubble Sort");

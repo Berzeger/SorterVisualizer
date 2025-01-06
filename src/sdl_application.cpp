@@ -46,8 +46,6 @@ SdlApplication::SdlApplication() :
 	m_currentSnapshotIndex(0),
 	m_barWidth(kWindowWidth / m_data.size())
 {
-	// Initialize sorter with BubbleSort algorithm
-	m_sorter.setSortAlgorithm(std::make_unique<QuickSort<int>>());
 }
 
 SdlApplication::~SdlApplication()
@@ -134,8 +132,9 @@ void SdlApplication::initAudio()
 	SDL_PauseAudioDevice(m_audioDeviceId, 0); // start playback
 }
 
-void SdlApplication::run()
+void SdlApplication::run(std::unique_ptr<Sort> sortAlgorithm)
 {
+	m_sorter.setSortAlgorithm(std::move(sortAlgorithm));
 	m_sorter.sort(m_data);
 	init();
 
