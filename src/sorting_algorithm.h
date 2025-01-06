@@ -2,10 +2,10 @@
 
 #include <vector>
 
-class Sort
+class SortingAlgorithm
 {
 public:
-	virtual ~Sort() = default;
+	virtual ~SortingAlgorithm() = default;
 	virtual std::vector<int> sort(std::vector<int>& data) = 0;
 	std::vector<std::vector<int>>& getSnapshots() { return m_snapshots; }
 	std::vector<int>& getSwaps() { return m_swaps; }

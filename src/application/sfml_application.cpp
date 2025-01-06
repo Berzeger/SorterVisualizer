@@ -4,10 +4,10 @@
 #include <cmath>
 #include <chrono>
 #include <thread>
-#include "bubble_sort.h"
-#include "quick_sort.h"
-#include "insertion_sort.h"
-#include "merge_sort.h"
+#include "../sorting_algorithms/bubble_sort.h"
+#include "../sorting_algorithms/quick_sort.h"
+#include "../sorting_algorithms/insertion_sort.h"
+#include "../sorting_algorithms/merge_sort.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -53,7 +53,7 @@ m_currentSnapshotIndex(0)
 {
 }
 
-void SfmlApplication::run(std::unique_ptr<Sort> sortAlgorithm)
+void SfmlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 {
 	m_sorter.setSortAlgorithm(std::move(sortAlgorithm));
 	m_sorter.sort(m_data);

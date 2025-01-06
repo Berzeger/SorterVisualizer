@@ -1,14 +1,14 @@
 #pragma once
 
 #include <memory>
-#include "sort.h"
+#include "../sorting_algorithm.h"
 
 class Application
 {
 public:
 	virtual ~Application() {};
 
-	virtual void run(std::unique_ptr<Sort> sortAlgorithm) = 0;
+	virtual void run(std::unique_ptr<SortingAlgorithm> sortAlgorithm) = 0;
 
 protected:
 	virtual void init() = 0;

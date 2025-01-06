@@ -7,11 +7,11 @@
 #include <vector>
 #include <stdexcept>
 #include <iostream>
-#include "sort.h"
+#include "sorting_algorithm.h"
 
 class SortAlgorithmRegistry {
 public:
-	using FactoryFunction = std::function<std::unique_ptr<Sort>()>;
+	using FactoryFunction = std::function<std::unique_ptr<SortingAlgorithm>()>;
 
 	// singleton
 	static SortAlgorithmRegistry& instance()
@@ -37,7 +37,7 @@ public:
 		return names;
 	}
 
-	std::unique_ptr<Sort> createSortAlgorithm(const std::string& name) const
+	std::unique_ptr<SortingAlgorithm> createSortAlgorithm(const std::string& name) const
 	{
 		auto it = m_factories.find(name);
 		if (it != m_factories.end()) 
@@ -58,9 +58,9 @@ private:
 
 // DERIVED_CLASS: name of the algorithm (e.g. BubbleSort<int>)
 // NAME_STRING: human readable name
-#define REGISTER_SORT_ALGORITHM(DERIVED_CLASS, NAME_STRING)                     \
+#define REGISTER_SORT_ALGORITHM(DERIVED_CLASS, NAME_STRING)           \
   inline bool register_##DERIVED_CLASS() {                            \
-    SortAlgorithmRegistry::instance().registerSortAlgorithm(                     \
+    SortAlgorithmRegistry::instance().registerSortAlgorithm(          \
       NAME_STRING,                                                    \
       [](){ return std::make_unique<DERIVED_CLASS>(); }               \
     );                                                                \

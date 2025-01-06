@@ -3,8 +3,8 @@
 #include "application.h"
 #include <SDL.h>
 #include <vector>
-#include "sorter.h"
-#include "sort.h"
+#include "../sorter.h"
+#include "../sorting_algorithm.h"
 
 class SdlApplication : public Application
 {
@@ -12,7 +12,7 @@ public:
 	SdlApplication();
 	~SdlApplication();
 
-	void run(std::unique_ptr<Sort> sortAlgorithm) override;
+	void run(std::unique_ptr<SortingAlgorithm> sortAlgorithm) override;
 
 private:
 	void init() override;

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
-#include "sfml_application.h"
-#include "sdl_application.h"
+#include "application/sfml_application.h"
+#include "application/sdl_application.h"
 #include "sort_algorithm_registry.h"
 
 int main(int argc, char** argv)

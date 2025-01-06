@@ -1,10 +1,10 @@
 #pragma once
 
-#include "sort.h"
-#include "sort_algorithm_registry.h"
+#include "../sorting_algorithm.h"
+#include "../sort_algorithm_registry.h"
 #include <vector>
 
-class MergeSort : public Sort
+class MergeSort : public SortingAlgorithm
 {
 public:
 	// The main sort function, called once

@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include "sorter.h"
+#include "../sorter.h"
 #include "application.h"
 #include <vector>
 #include <SFML/Audio.hpp>
@@ -14,7 +14,7 @@ public:
 	SfmlApplication();
 	~SfmlApplication() {}
 
-	void run(std::unique_ptr<Sort> sortAlgorithm) override;
+	void run(std::unique_ptr<SortingAlgorithm> sortAlgorithm) override;
 
 private:
 	void init() override;

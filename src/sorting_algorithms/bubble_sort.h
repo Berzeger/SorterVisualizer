@@ -1,9 +1,9 @@
 #pragma once
 
-#include "sort.h"
-#include "sort_algorithm_registry.h"
+#include "../sorting_algorithm.h"
+#include "../sort_algorithm_registry.h"
 
-class BubbleSort : public Sort
+class BubbleSort : public SortingAlgorithm
 {
 public:
 	std::vector<int> sort(std::vector<int>& data) override

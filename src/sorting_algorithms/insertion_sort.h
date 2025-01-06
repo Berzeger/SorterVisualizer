@@ -1,8 +1,8 @@
 #pragma once
-#include "sort.h"
-#include "sort_algorithm_registry.h"
+#include "../sorting_algorithm.h"
+#include "../sort_algorithm_registry.h"
 
-class InsertionSort : public Sort
+class InsertionSort : public SortingAlgorithm
 {
 public:
 	std::vector<int> sort(std::vector<int>& data)

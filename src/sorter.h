@@ -2,12 +2,12 @@
 
 #include <memory>
 #include <iostream>
-#include "sort.h"
+#include "sorting_algorithm.h"
 
 class Sorter
 {
 public:
-	void setSortAlgorithm(std::unique_ptr<Sort> sortAlgorithm)
+	void setSortAlgorithm(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 	{
 		m_sortAlgorithm = std::move(sortAlgorithm);
 	}
@@ -42,5 +42,5 @@ public:
 	}
 
 private:
-	std::unique_ptr<Sort> m_sortAlgorithm;
+	std::unique_ptr<SortingAlgorithm> m_sortAlgorithm;
 };

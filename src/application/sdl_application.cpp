@@ -1,8 +1,8 @@
 #include "sdl_application.h"
 #include <iostream>
-#include "bubble_sort.h"
-#include "insertion_sort.h"
-#include "quick_sort.h"
+#include "../sorting_algorithms/bubble_sort.h"
+#include "../sorting_algorithms/insertion_sort.h"
+#include "../sorting_algorithms/quick_sort.h"
 
 const int kWindowHeight = 600;
 const int kWindowWidth = 810;
@@ -132,7 +132,7 @@ void SdlApplication::initAudio()
 	SDL_PauseAudioDevice(m_audioDeviceId, 0); // start playback
 }
 
-void SdlApplication::run(std::unique_ptr<Sort> sortAlgorithm)
+void SdlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 {
 	m_sorter.setSortAlgorithm(std::move(sortAlgorithm));
 	m_sorter.sort(m_data);
