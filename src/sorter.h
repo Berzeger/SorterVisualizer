@@ -30,39 +30,14 @@ public:
 		std::cout << std::endl;
 	}
 
-	void assignData(const std::vector<T>& data) const
+	const std::vector<std::vector<T>>& getSnapshots() const 
 	{
-		if (!m_sortAlgorithm)
-		{
-			return;
-		}
-
-		m_sortAlgorithm->assignData(data);
+		return m_sortAlgorithm->getSnapshots();
 	}
 
-	bool sortStep(T& sortedElem)
+	const std::vector<int>& getSwaps() const 
 	{
-		if (!m_sortAlgorithm)
-		{
-			return false;
-		}
-
-		return m_sortAlgorithm->sortStep(sortedElem);
-	}
-
-	const std::vector<T>& getData() const
-	{
-		return m_sortAlgorithm->getData();
-	}
-
-	size_t getLastMovedIndex() const
-	{
-		if (!m_sortAlgorithm)
-		{
-			return -1;
-		}
-
-		return m_sortAlgorithm->getLastMovedIndex();
+		return m_sortAlgorithm->getSwaps();
 	}
 
 private:

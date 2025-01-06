@@ -2,24 +2,50 @@
 #include <iostream>
 #include "bubble_sort.h"
 
-const int kBarWidth = 20;
 const int kWindowHeight = 600;
-const int kWindowWidth = 800;
-const int kDrawInterval = 10;
+const int kWindowWidth = 810;
+const int kDrawInterval = 3;
 
 SdlApplication::SdlApplication() :
 	m_window(),
 	m_renderer(),
 	keepWindowOpen(true),
 	m_event(),
-	m_data{ 67, 53, 88, 34, 61, 151, 192, 142, 66, 243, 27, 223, 194, 223, 38, 242, 48, 21, 237, 77, 224, 146, 101, 74, 8, 127, 119, 128, 48, 132, 83, 15, 18, 37, 28, 8, 94, 72, 93, 217 },
-	m_timeSinceLastDraw(0.f),
+	m_data{ 67, 53, 88, 34, 61, 151, 192, 142, 66, 243,
+	27, 223, 194, 223, 38, 242, 48, 21, 237, 77,
+	224, 146, 101, 74, 8, 127, 119, 128, 48, 132,
+	83, 15, 18, 37, 28, 8, 94, 72, 93, 217,
+	56, 130, 85, 159, 202, 45, 110, 175, 59, 210,
+	134, 199, 12, 89, 145, 203, 54, 176, 29, 68,
+	116, 39, 162, 207, 23, 150, 91, 184, 140, 33,
+	157, 121, 69, 98, 205, 84, 3, 156, 222, 115,
+	178, 50, 189, 104, 11, 190, 60, 136, 197, 51,
+	124, 173, 95, 182, 44, 168, 79, 153, 224, 7,
+	167, 134, 146, 63, 212, 30, 108, 191, 75, 139,
+	166, 124, 161, 22, 189, 49, 116, 138, 185, 64,
+	214, 157, 31, 83, 196, 102, 25, 179, 71, 189,
+	117, 143, 55, 126, 190, 87, 205, 20, 99, 154,
+	58, 121, 189, 40, 164, 107, 13, 148, 196, 81,
+	203, 34, 175, 96, 218, 49, 133, 180, 77, 161,
+	5, 112, 190, 36, 207, 89, 130, 144, 61, 198,
+	72, 167, 119, 29, 185, 103, 154, 46, 176, 85,
+	210, 38, 141, 192, 66, 229, 14, 123, 181, 57,
+	200, 82, 155, 47, 169, 109, 19, 178, 93, 140,
+	65, 215, 24, 135, 187, 52, 204, 97, 173, 8,
+	161, 59, 190, 43, 222, 76, 128, 116, 84, 199,
+	35, 150, 209, 62, 176, 109, 17, 194, 90, 138,
+	70, 213, 26, 164, 188, 53, 207, 101, 179, 32,
+	145, 210, 61, 182, 111, 39, 196, 85, 175, 44,
+	223, 68, 152, 114, 89, 205, 21, 133, 199, 58,
+	170, 104, 16, 189, 73, 218, 49, 161, 126, 95
+}, m_timeSinceLastDraw(0.f),
 	m_audioDeviceId(0),
-	m_timeLastFrame(0.f)
+	m_timeLastFrame(0.f),
+	m_currentSnapshotIndex(0),
+	m_barWidth(kWindowWidth / m_data.size())
 {
 	// Initialize sorter with BubbleSort algorithm
 	m_sorter.setSortAlgorithm(std::make_unique<BubbleSort<int>>());
-	m_sorter.assignData(m_data);
 }
 
 SdlApplication::~SdlApplication()
@@ -108,6 +134,7 @@ void SdlApplication::initAudio()
 
 void SdlApplication::run()
 {
+	m_sorter.sort(m_data);
 	init();
 
 	while (keepWindowOpen)
@@ -142,13 +169,16 @@ void SdlApplication::update()
 
 	if (m_timeSinceLastDraw >= kDrawInterval)
 	{
-		int sortedElem;
-		if (m_sorter.sortStep(sortedElem))
+		const auto& snapshots = m_sorter.getSnapshots();
+		if (m_currentSnapshotIndex < snapshots.size() - 1 && !snapshots.empty())
 		{
-			int frequency = 200 + (sortedElem * 20);
+			const auto& currentArr = snapshots[m_currentSnapshotIndex];
+
+			int frequency = 200 + (currentArr[m_sorter.getSwaps()[m_currentSnapshotIndex]] * 10);
 			if (frequency > 32767) frequency = 32767; // Beep max frequency
 			beep(frequency, kDrawInterval);
 		}
+
 		m_timeSinceLastDraw = 0.f;
 	}
 }
@@ -158,28 +188,38 @@ void SdlApplication::render()
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255); // set black color
 	SDL_RenderClear(m_renderer); // background
 
-	const auto& data = m_sorter.getData();
+	const auto& snapshots = m_sorter.getSnapshots();
+	const auto& data = snapshots[m_currentSnapshotIndex];
 	size_t nData = data.size();
-	for (size_t i = 0; i < nData; ++i)
+
+	if (snapshots.size() > 0) 
 	{
-		float barHeight = static_cast<float>(data[i] * 2 + 1);
-
-		if (m_sorter.getLastMovedIndex() == i)
+		for (size_t i = 0; i < nData; ++i)
 		{
-			SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255); // red rectangle
-		}
-		else
-		{
-			SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255); // white rectangle
-		}
+			float barHeight = static_cast<float>(data[i] * 2 + 1);
 
-		SDL_Rect rect;
-		rect.x = i * kBarWidth;
-		rect.y = kWindowHeight - barHeight;
-		rect.w = kBarWidth;
-		rect.h = barHeight;
+			if (m_sorter.getSwaps()[m_currentSnapshotIndex] == i)
+			{
+				SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255); // red rectangle
+			}
+			else
+			{
+				SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255); // white rectangle
+			}
 
-		SDL_RenderFillRect(m_renderer, &rect);
+			SDL_Rect rect;
+			rect.x = i * m_barWidth;
+			rect.y = kWindowHeight - barHeight;
+			rect.w = m_barWidth;
+			rect.h = barHeight;
+
+			SDL_RenderFillRect(m_renderer, &rect);
+		}
+	}
+
+	if (m_currentSnapshotIndex < snapshots.size() - 1 && !snapshots.empty())
+	{
+		m_currentSnapshotIndex++;
 	}
 
 	SDL_RenderPresent(m_renderer);
@@ -221,5 +261,5 @@ void SdlApplication::beep(int frequency, int durationMs)
 	}
 
 	SDL_QueueAudio(m_audioDeviceId, buffer.data(), buffer.size() * sizeof(Sint16));
-	SDL_Delay(durationMs);
+	//SDL_Delay(durationMs);
 }

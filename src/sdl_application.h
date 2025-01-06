@@ -33,4 +33,6 @@ private:
 	float m_timeSinceLastDraw;
 	float m_timeLastFrame;
 	int m_audioDeviceId;
+	int m_currentSnapshotIndex;
+	int m_barWidth;
 };

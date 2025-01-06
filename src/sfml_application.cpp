@@ -4,8 +4,8 @@
 #include <cmath>
 #include <chrono>
 #include <thread>
+#include "bubble_sort.h"
 #include "quick_sort.h"
-#include "merge_sort.h"
 #include "insertion_sort.h"
 
 #ifndef M_PI
@@ -46,16 +46,17 @@ SfmlApplication::SfmlApplication() :
 		145, 210, 61, 182, 111, 39, 196, 85, 175, 44,
 		223, 68, 152, 114, 89, 205, 21, 133, 199, 58,
 		170, 104, 16, 189, 73, 218, 49, 161, 126, 95
-	},
-	m_barWidth(kWindowWidth / m_data.size())
+},
+m_barWidth(kWindowWidth / m_data.size()),
+m_currentSnapshotIndex(0)
 {
 	// Initialize sorter with BubbleSort algorithm
-	m_sorter.setSortAlgorithm(std::make_unique<InsertionSort<int>>());
-	m_sorter.assignData(m_data);
+	m_sorter.setSortAlgorithm(std::make_unique<BubbleSort<int>>());
 }
 
 void SfmlApplication::run()
 {
+	m_sorter.sort(m_data);
 	init();
 
 	while (m_window->isOpen())
@@ -64,9 +65,6 @@ void SfmlApplication::run()
 		update();
 		render();
 	}
-
-	// Optionally print sorted data
-	m_sorter.print(m_sorter.getData());
 }
 
 void SfmlApplication::init()
@@ -91,27 +89,19 @@ void SfmlApplication::update()
 	static bool finalDebugWritten = false;
 	float ms = m_deltaClock.restart().asMicroseconds() / 1000.f;
 	m_timeSinceLastDraw += ms;
-	//std::cout << "ms = " << ms << ", m_timeSinceLastDraw = " << m_timeSinceLastDraw << "\n";
+	std::cout << "ms = " << ms << ", m_timeSinceLastDraw = " << m_timeSinceLastDraw << "\n";
 	if (m_timeSinceLastDraw >= kDrawInterval)
 	{
-		int sortedElem;
-		if (m_sorter.sortStep(sortedElem))
+		const auto& snapshots = m_sorter.getSnapshots();
+		if (m_currentSnapshotIndex < snapshots.size() - 1 && !snapshots.empty())
 		{
-			int frequency = 200 + (sortedElem * 20);
+			const auto& currentArr = snapshots[m_currentSnapshotIndex];
+
+			int frequency = 200 + (currentArr[m_sorter.getSwaps()[m_currentSnapshotIndex]] * 10);
 			if (frequency > 32767) frequency = 32767; // Beep max frequency
 			beep(frequency, kDrawInterval);
 		}
-		else
-		{
-			if (!finalDebugWritten)
-			{
-				auto & final = m_sorter.getData();
-				for (auto val : final) std::cout << val << " ";
-				std::cout << "\n[DEBUG] Sort is done, final array above.\n";
-				finalDebugWritten = true;
-			}
-		}
-		
+
 		m_timeSinceLastDraw = 0.f;
 	}
 }
@@ -120,24 +110,34 @@ void SfmlApplication::render()
 {
 	m_window->clear(sf::Color::Black);
 
-	const auto& data = m_sorter.getData();
+	const auto& snapshots = m_sorter.getSnapshots();
+	const auto& data = snapshots[m_currentSnapshotIndex];
 	size_t nData = data.size();
-	for (size_t i = 0; i < nData; ++i)
+
+	if (snapshots.size() > 0) 
 	{
-		float barHeight = static_cast<float>(data[i] * 2 + 1);
-		sf::RectangleShape rectangle(sf::Vector2f(m_barWidth, barHeight));
-
-		if (m_sorter.getLastMovedIndex() == i)
+		for (size_t i = 0; i < nData; ++i)
 		{
-			rectangle.setFillColor(sf::Color::Red);
-		}
-		else
-		{
-			rectangle.setFillColor(sf::Color::White);
-		}
+			float barHeight = static_cast<float>(data[i] * 2 + 1);
+			sf::RectangleShape rectangle(sf::Vector2f(m_barWidth, barHeight));
 
-		rectangle.setPosition(i * m_barWidth, kWindowHeight - barHeight);
-		m_window->draw(rectangle);
+			if (m_sorter.getSwaps()[m_currentSnapshotIndex] == i)
+			{
+				rectangle.setFillColor(sf::Color::Red);
+			}
+			else
+			{
+				rectangle.setFillColor(sf::Color::White);
+			}
+
+			rectangle.setPosition(i * m_barWidth, kWindowHeight - barHeight);
+			m_window->draw(rectangle);
+		}
+	}
+
+	if (m_currentSnapshotIndex < snapshots.size() - 1 && !snapshots.empty())
+	{
+		m_currentSnapshotIndex++;
 	}
 
 	m_window->display();

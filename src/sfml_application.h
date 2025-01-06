@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include "sorter.h"
-#include "bubble_sort.h"
 #include "application.h"
 #include <vector>
 #include <SFML/Audio.hpp>
@@ -35,4 +34,5 @@ private:
 	sf::Sound m_sound;
 
 	float m_barWidth;
+	int m_currentSnapshotIndex;
 };
