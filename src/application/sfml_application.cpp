@@ -55,8 +55,8 @@ m_currentSnapshotIndex(0)
 
 void SfmlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 {
-	m_sorter.setSortAlgorithm(std::move(sortAlgorithm));
-	m_sorter.sort(m_data);
+	m_sortAlgorithm = std::move(sortAlgorithm);
+	m_sortAlgorithm->sort(m_data);
 	init();
 
 	while (m_window->isOpen())
@@ -92,12 +92,12 @@ void SfmlApplication::update()
 	std::cout << "ms = " << ms << ", m_timeSinceLastDraw = " << m_timeSinceLastDraw << "\n";
 	if (m_timeSinceLastDraw >= kDrawInterval)
 	{
-		const auto& snapshots = m_sorter.getSnapshots();
+		const std::vector<std::vector<int>>& snapshots = m_sortAlgorithm->getSnapshots();
 		if (m_currentSnapshotIndex < snapshots.size() - 1 && !snapshots.empty())
 		{
-			const auto& currentArr = snapshots[m_currentSnapshotIndex];
+			const std::vector<int>& currentArr = snapshots[m_currentSnapshotIndex];
 
-			int frequency = 200 + (currentArr[m_sorter.getSwaps()[m_currentSnapshotIndex]] * 10);
+			int frequency = 200 + (currentArr[m_sortAlgorithm->getSwaps()[m_currentSnapshotIndex]] * 10);
 			if (frequency > 32767) frequency = 32767; // Beep max frequency
 			beep(frequency, kDrawInterval);
 			m_currentSnapshotIndex++;
@@ -111,8 +111,8 @@ void SfmlApplication::render()
 {
 	m_window->clear(sf::Color::Black);
 
-	const auto& snapshots = m_sorter.getSnapshots();
-	const auto& data = snapshots[m_currentSnapshotIndex];
+	const std::vector<std::vector<int>>& snapshots = m_sortAlgorithm->getSnapshots();
+	const std::vector<int>& data = snapshots[m_currentSnapshotIndex];
 	size_t nData = data.size();
 
 	if (snapshots.size() > 0) 
@@ -122,7 +122,7 @@ void SfmlApplication::render()
 			float barHeight = static_cast<float>(data[i] * 2 + 1);
 			sf::RectangleShape rectangle(sf::Vector2f(m_barWidth, barHeight));
 
-			if (m_sorter.getSwaps()[m_currentSnapshotIndex] == i)
+			if (m_sortAlgorithm->getSwaps()[m_currentSnapshotIndex] == i)
 			{
 				rectangle.setFillColor(sf::Color::Red);
 			}

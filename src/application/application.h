@@ -16,4 +16,7 @@ protected:
 	virtual void update() = 0;
 	virtual void render() = 0;
 	virtual void beep(int frequency, int durationMs) = 0;
+
+protected:
+	std::unique_ptr<SortingAlgorithm> m_sortAlgorithm;
 };

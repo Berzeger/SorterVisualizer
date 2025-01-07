@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
-#include "../sorter.h"
 #include "application.h"
 #include <vector>
 #include <SFML/Audio.hpp>
@@ -29,7 +28,6 @@ private:
 	float m_timeSinceLastDraw;
 
 	std::vector<int> m_data;
-	Sorter m_sorter;
 	sf::SoundBuffer m_soundBuffer;
 	sf::Sound m_sound;
 

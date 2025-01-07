@@ -3,7 +3,6 @@
 #include "application.h"
 #include <SDL.h>
 #include <vector>
-#include "../sorter.h"
 #include "../sorting_algorithm.h"
 
 class SdlApplication : public Application
@@ -30,7 +29,6 @@ private:
 	SDL_Event m_event;
 
 	std::vector<int> m_data;
-	Sorter m_sorter;
 	float m_timeSinceLastDraw;
 	float m_timeLastFrame;
 	int m_audioDeviceId;
