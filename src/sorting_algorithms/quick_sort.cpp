@@ -46,14 +46,14 @@ int QuickSort::partition(std::vector<int>& vec, int low, int high)
 			i++;
 			std::swap(vec[i], vec[j]);
 			this->m_snapshots.push_back(vec);
-			this->m_swaps.push_back(vec[j]);
+			this->m_swaps.push_back(j);
 		}
 	}
 
 	// Put pivot to its position
 	std::swap(vec[i + 1], vec[high]);
 	this->m_snapshots.push_back(vec);
-	this->m_swaps.push_back(vec[high]);
+	this->m_swaps.push_back(high);
 
 	// Return the point of partition
 	return (i + 1);

@@ -14,7 +14,7 @@ std::vector<int> InsertionSort::sort(std::vector<int>& data)
 		{
 			std::swap(data[j], data[j - 1]);
 			this->m_snapshots.push_back(data);
-			this->m_swaps.push_back(data[j]);
+			this->m_swaps.push_back(j - 1);
 			j--;
 		}
 		i++;
