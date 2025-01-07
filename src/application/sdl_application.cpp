@@ -138,7 +138,7 @@ void SdlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 	m_sorter.sort(m_data);
 	init();
 
-	while (keepWindowOpen)
+	while (m_keepWindowOpen)
 	{
 		handleEvents();
 		update();
@@ -153,7 +153,7 @@ void SdlApplication::handleEvents()
 		switch (m_event.type)
 		{
 		case SDL_QUIT:
-			keepWindowOpen = false;
+			m_keepWindowOpen = false;
 			break;
 		}
 	}
