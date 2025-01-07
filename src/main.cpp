@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv)
 {
-	Application* app;
+	std::unique_ptr<Application> app;
 	int libChoice;
 
 	// let the user select the library (SDL/SFML)
@@ -16,10 +16,10 @@ LIB_CHOICE:
 	switch (libChoice)
 	{
 	case 1:
-		app = new SfmlApplication();
+		app = std::make_unique<SfmlApplication>();
 		break;
 	case 2:
-		app = new SdlApplication();
+		app = std::make_unique<SdlApplication>();
 		break;
 	default:
 		std::cout << "Unrecognized choice.\n";
@@ -52,7 +52,6 @@ SORT_ALGORITHM_CHOICE:
 	auto mySorter = SortAlgorithmRegistry::instance().createSortAlgorithm(chosenName);
 
 	app->run(std::move(mySorter));
-	delete app;
 
 	return 0; // SDL requires the main function to return, even though standard C++ doesn't need it.
 }
