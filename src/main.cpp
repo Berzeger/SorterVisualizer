@@ -1,17 +1,14 @@
 #include <iostream>
-#include <vector>
 #include "application/sfml_application.h"
 #include "application/sdl_application.h"
 #include "sort_algorithm_registry.h"
 
 int main(int argc, char** argv)
 {
-	SfmlApplication sfmlApp;
-	SdlApplication sdlApp;
-
 	Application* app;
 	int libChoice;
 
+	// let the user select the library (SDL/SFML)
 LIB_CHOICE:
 	std::cout << "Select library:\n1. SFML\n2. SDL\n";
 	std::cin >> libChoice;
@@ -29,6 +26,7 @@ LIB_CHOICE:
 		goto LIB_CHOICE;
 	}
 
+	// let the user select the algorithm
 	auto sortAlgorithmNames = SortAlgorithmRegistry::instance().getRegisteredNames();
 	
 SORT_ALGORITHM_CHOICE:
