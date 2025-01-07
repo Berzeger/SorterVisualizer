@@ -13,7 +13,12 @@ SdlApplication::SdlApplication() :
 	m_renderer(),
 	m_keepWindowOpen(true),
 	m_event(),
-	m_data{ 67, 53, 88, 34, 61, 151, 192, 142, 66, 243,
+	m_audioDeviceId(0),
+	m_timeLastFrame(0.f)
+{
+	m_timeSinceLastDraw = 0.f;
+	m_currentSnapshotIndex = 0;
+	m_data = { 67, 53, 88, 34, 61, 151, 192, 142, 66, 243,
 	27, 223, 194, 223, 38, 242, 48, 21, 237, 77,
 	224, 146, 101, 74, 8, 127, 119, 128, 48, 132,
 	83, 15, 18, 37, 28, 8, 94, 72, 93, 217,
@@ -40,12 +45,8 @@ SdlApplication::SdlApplication() :
 	145, 210, 61, 182, 111, 39, 196, 85, 175, 44,
 	223, 68, 152, 114, 89, 205, 21, 133, 199, 58,
 	170, 104, 16, 189, 73, 218, 49, 161, 126, 95
-}, m_timeSinceLastDraw(0.f),
-	m_audioDeviceId(0),
-	m_timeLastFrame(0.f),
-	m_currentSnapshotIndex(0),
-	m_barWidth(kWindowWidth / m_data.size())
-{
+	};
+	m_barWidth = kWindowWidth / m_data.size();
 }
 
 SdlApplication::~SdlApplication()
@@ -238,6 +239,11 @@ void SdlApplication::beep(int frequency, int durationMs)
 	double phaseIncrement = (2.f * M_PI * frequency) / sampleRate;
 	double phase = 0.f;
 	int fadeSamples = sampleRate / 200; // 5 ms fade, prevents crackling
+
+	if (fadeSamples * 2 > length)
+	{
+		fadeSamples = length / 4;
+	}
 
 	for (int i = 0; i < length; ++i)
 	{

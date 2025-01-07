@@ -18,9 +18,11 @@ const float kWindowWidth = 800.f;
 const int kDrawInterval = 10;
 
 SfmlApplication::SfmlApplication() :
-	m_window(),
-	m_timeSinceLastDraw(0.f),
-	m_data{ 67, 53, 88, 34, 61, 151, 192, 142, 66, 243,
+	m_window()
+{
+	m_timeSinceLastDraw = 0.f;
+	m_currentSnapshotIndex = 0;
+	m_data = { 67, 53, 88, 34, 61, 151, 192, 142, 66, 243,
 		27, 223, 194, 223, 38, 242, 48, 21, 237, 77,
 		224, 146, 101, 74, 8, 127, 119, 128, 48, 132,
 		83, 15, 18, 37, 28, 8, 94, 72, 93, 217,
@@ -47,10 +49,8 @@ SfmlApplication::SfmlApplication() :
 		145, 210, 61, 182, 111, 39, 196, 85, 175, 44,
 		223, 68, 152, 114, 89, 205, 21, 133, 199, 58,
 		170, 104, 16, 189, 73, 218, 49, 161, 126, 95
-},
-m_barWidth(kWindowWidth / m_data.size()),
-m_currentSnapshotIndex(0)
-{
+	};
+	m_barWidth = kWindowWidth / m_data.size();
 }
 
 void SfmlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)

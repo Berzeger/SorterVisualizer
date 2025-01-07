@@ -19,4 +19,7 @@ protected:
 
 protected:
 	std::unique_ptr<SortingAlgorithm> m_sortAlgorithm;
+	std::vector<int> m_data;
+	float m_timeSinceLastDraw;
+	int m_currentSnapshotIndex;
 };

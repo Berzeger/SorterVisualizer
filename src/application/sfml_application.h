@@ -25,12 +25,8 @@ private:
 private:
 	std::unique_ptr<sf::RenderWindow> m_window;
 	sf::Clock m_deltaClock;
-	float m_timeSinceLastDraw;
-
-	std::vector<int> m_data;
 	sf::SoundBuffer m_soundBuffer;
 	sf::Sound m_sound;
 
 	float m_barWidth;
-	int m_currentSnapshotIndex;
 };
