@@ -11,9 +11,11 @@ std::vector<int> BubbleSort::sort(std::vector<int>& data)
 	{
 		for (int j = 0; j < nData - 1; ++j)
 		{
+			m_totalComparisonOperations++;
 			if (data[j] > data[j + 1])
 			{
 				std::swap(data[j], data[j + 1]);
+				m_totalMoveOperations++;
 				this->m_snapshots.push_back(data);
 				this->m_swaps.push_back(j + 1);
 			}

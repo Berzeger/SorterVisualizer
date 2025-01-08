@@ -41,10 +41,12 @@ int QuickSort::partition(std::vector<int>& vec, int low, int high)
 	{
 		// If current element is smaller than or
 		// equal to pivot
+		m_totalComparisonOperations++;
 		if (vec[j] <= pivot)
 		{
 			i++;
 			std::swap(vec[i], vec[j]);
+			m_totalMoveOperations++;
 			this->m_snapshots.push_back(vec);
 			this->m_swaps.push_back(j);
 		}
@@ -52,6 +54,7 @@ int QuickSort::partition(std::vector<int>& vec, int low, int high)
 
 	// Put pivot to its position
 	std::swap(vec[i + 1], vec[high]);
+	m_totalMoveOperations++;
 	this->m_snapshots.push_back(vec);
 	this->m_swaps.push_back(high);
 

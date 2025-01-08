@@ -13,12 +13,14 @@ std::vector<int> GnomeSort::sort(std::vector<int>& data)
 			index++;
 		}
 
+		m_totalComparisonOperations++;
 		if (data[index] >= data[index - 1])
 		{
 			index++;
 		}
 		else
 		{
+			m_totalMoveOperations++;
 			std::swap(data[index], data[index - 1]);
 			m_snapshots.push_back(data);
 			m_swaps.push_back(index - 1);

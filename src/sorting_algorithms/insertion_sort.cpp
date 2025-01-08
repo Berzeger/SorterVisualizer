@@ -10,8 +10,9 @@ std::vector<int> InsertionSort::sort(std::vector<int>& data)
 	while (i < nData)
 	{
 		int j = i;
-		while (j > 0 && data[j - 1] > data[j])
+		while (j > 0 && ++m_totalComparisonOperations && data[j - 1] > data[j])
 		{
+			m_totalMoveOperations++;
 			std::swap(data[j], data[j - 1]);
 			this->m_snapshots.push_back(data);
 			this->m_swaps.push_back(j - 1);

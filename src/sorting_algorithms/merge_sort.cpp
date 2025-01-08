@@ -61,6 +61,8 @@ void MergeSort::merge(std::vector<int>& arr, int left, int mid, int right)
 			j++;
 		}
 
+		m_totalComparisonOperations++;
+		m_totalMoveOperations++;
 		this->m_swaps.push_back(k);
 		this->m_snapshots.push_back(arr);
 
@@ -73,6 +75,7 @@ void MergeSort::merge(std::vector<int>& arr, int left, int mid, int right)
 		arr[k] = L[i];
 		i++;
 
+		m_totalMoveOperations++;
 		this->m_swaps.push_back(k);
 		this->m_snapshots.push_back(arr);
 
@@ -84,7 +87,8 @@ void MergeSort::merge(std::vector<int>& arr, int left, int mid, int right)
 	{
 		arr[k] = R[j];
 		j++;
-
+		
+		m_totalMoveOperations++;
 		this->m_swaps.push_back(k);
 		this->m_snapshots.push_back(arr);
 

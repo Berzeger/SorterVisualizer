@@ -62,7 +62,7 @@ private:
   inline bool register_##DERIVED_CLASS() {                            \
     SortAlgorithmRegistry::instance().registerSortAlgorithm(          \
       NAME_STRING,                                                    \
-      [](){ return std::make_unique<DERIVED_CLASS>(); }               \
+      [](){ return std::make_unique<DERIVED_CLASS>(NAME_STRING); }    \
     );                                                                \
     return true;                                                      \
   }                                                                   \

@@ -1,8 +1,6 @@
 #include "sdl_application.h"
 #include <iostream>
-#include "../sorting_algorithms/bubble_sort.h"
-#include "../sorting_algorithms/insertion_sort.h"
-#include "../sorting_algorithms/quick_sort.h"
+#include <sstream>
 
 const int kWindowHeight = 600;
 const int kWindowWidth = 810;
@@ -55,16 +53,29 @@ SdlApplication::~SdlApplication()
 	{
 		SDL_DestroyRenderer(m_renderer);
 	}
+
 	if (m_window)
 	{
 		SDL_DestroyWindow(m_window);
 	}
+
 	if (m_audioDeviceId != 0)
 	{
 		SDL_CloseAudioDevice(m_audioDeviceId);
 		m_audioDeviceId = 0;
 	}
 
+	if (m_textTexture)
+	{
+		SDL_DestroyTexture(m_textTexture);
+	}
+
+	if (m_font) 
+	{
+		TTF_CloseFont(m_font);
+	}
+
+	TTF_Quit();
 	SDL_Quit();
 }
 
@@ -72,8 +83,21 @@ void SdlApplication::init()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		std::cout << "Failed to initialize SDL.\n";
+		std::cout << "Failed to initialize SDL: " << SDL_GetError() << "\n";
 		return;
+	}
+
+	if (TTF_Init() == -1)
+	{
+		std::cout << "Failed to initiailize SDL TTF: " << TTF_GetError() << "\n";
+		SDL_Quit();
+		return;
+	}
+
+	m_font = TTF_OpenFont("fonts/Arial.ttf", 18);
+	if (!m_font)
+	{
+		std::cout << "Failed to open the font file: " << TTF_GetError() << "\n";
 	}
 
 	m_window = SDL_CreateWindow("My SDL Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, kWindowWidth, kWindowHeight, 0);
@@ -81,6 +105,7 @@ void SdlApplication::init()
 	if (!m_window)
 	{
 		std::cout << "Failed to create window.\n";
+		TTF_Quit();
 		SDL_Quit();
 		return;
 	}
@@ -90,6 +115,7 @@ void SdlApplication::init()
 	if (!m_renderer)
 	{
 		std::cout << "Failed to create renderer./n";
+		TTF_Quit();
 		SDL_Quit();
 		return;
 	}
@@ -135,9 +161,11 @@ void SdlApplication::initAudio()
 
 void SdlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 {
+	init();
+
 	m_sortAlgorithm = std::move(sortAlgorithm);
 	m_sortAlgorithm->sort(m_data);
-	init();
+	prepareTextStats();
 
 	while (m_keepWindowOpen)
 	{
@@ -145,6 +173,31 @@ void SdlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 		update();
 		render();
 	}
+}
+
+void SdlApplication::prepareTextStats() 
+{
+	std::ostringstream oss;
+
+	oss << m_sortAlgorithm->getName() <<
+		": Total comparisons: " <<
+		m_sortAlgorithm->getTotalComparisonOperations() << 
+		", total moves: " <<
+		m_sortAlgorithm->getTotalMoveOperations() <<
+		" (" <<
+		m_sortAlgorithm->getTotalOperations() <<
+		" operations in total).";
+	std::string text = oss.str();
+
+	SDL_Surface* textSurface = TTF_RenderText_Solid(m_font, text.c_str(), { 255, 255, 255, 255 });
+	if (!textSurface)
+	{
+		std::cout << "Error while rendering text: " << TTF_GetError() << "\n";
+		return;
+	}
+
+	m_textTexture = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+	SDL_FreeSurface(textSurface);
 }
 
 void SdlApplication::handleEvents()
@@ -217,6 +270,20 @@ void SdlApplication::render()
 			rect.h = barHeight;
 
 			SDL_RenderFillRect(m_renderer, &rect);
+
+			if (m_textTexture)
+			{
+				int texW = 0;
+				int texH = 0;
+				SDL_QueryTexture(m_textTexture, nullptr, nullptr, &texW, &texH);
+
+				SDL_Rect dstRect;
+				dstRect.x = (kWindowWidth - texW) / 2;
+				dstRect.y = 0;
+				dstRect.w = texW;
+				dstRect.h = texH;
+				SDL_RenderCopy(m_renderer, m_textTexture, nullptr, &dstRect);
+			}
 		}
 	}
 

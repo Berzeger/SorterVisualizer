@@ -13,12 +13,14 @@ std::vector<int> SelectionSort::sort(std::vector<int>& data)
 
 		for (int j = i + 1; j < nData; ++j)
 		{
+			m_totalComparisonOperations++;
 			if (data[j] < data[minIdx])
 			{
 				minIdx = j;
 			}
 		}
 
+		m_totalMoveOperations++;
 		std::swap(data[i], data[minIdx]);
 		this->m_snapshots.push_back(data);
 		this->m_swaps.push_back(i);
