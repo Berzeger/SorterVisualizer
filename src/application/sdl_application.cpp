@@ -269,21 +269,21 @@ void SdlApplication::render()
 			rect.h = barHeight;
 
 			SDL_RenderFillRect(m_renderer, &rect);
-
-			if (m_textTexture)
-			{
-				int texW = 0;
-				int texH = 0;
-				SDL_QueryTexture(m_textTexture, nullptr, nullptr, &texW, &texH);
-
-				SDL_Rect dstRect;
-				dstRect.x = (kWindowWidth - texW) / 2;
-				dstRect.y = 0;
-				dstRect.w = texW;
-				dstRect.h = texH;
-				SDL_RenderCopy(m_renderer, m_textTexture, nullptr, &dstRect);
-			}
 		}
+	}
+
+	if (m_textTexture)
+	{
+		int texW = 0;
+		int texH = 0;
+		SDL_QueryTexture(m_textTexture, nullptr, nullptr, &texW, &texH);
+
+		SDL_Rect dstRect;
+		dstRect.x = (kWindowWidth - texW) / 2;
+		dstRect.y = 0;
+		dstRect.w = texW;
+		dstRect.h = texH;
+		SDL_RenderCopy(m_renderer, m_textTexture, nullptr, &dstRect);
 	}
 
 	SDL_RenderPresent(m_renderer);
