@@ -178,7 +178,6 @@ void SdlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 void SdlApplication::prepareTextStats() 
 {
 	std::ostringstream oss;
-
 	oss << m_sortAlgorithm->getName() <<
 		": Total comparisons: " <<
 		m_sortAlgorithm->getTotalComparisonOperations() << 

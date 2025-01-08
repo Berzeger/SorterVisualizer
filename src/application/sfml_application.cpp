@@ -1,9 +1,11 @@
 // SFMLApplication.cpp
 #include "sfml_application.h"
 #include <iostream>
+#include <sstream>
 #include <cmath>
 #include <chrono>
 #include <thread>
+#include <filesystem>
 #include "../sorting_algorithms/bubble_sort.h"
 #include "../sorting_algorithms/quick_sort.h"
 #include "../sorting_algorithms/insertion_sort.h"
@@ -18,7 +20,9 @@ const float kWindowWidth = 800.f;
 const int kDrawInterval = 10;
 
 SfmlApplication::SfmlApplication() :
-	m_window()
+	m_window(),
+	m_text(),
+	m_font()
 {
 	m_timeSinceLastDraw = 0.f;
 	m_currentSnapshotIndex = 0;
@@ -55,9 +59,10 @@ SfmlApplication::SfmlApplication() :
 
 void SfmlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 {
+	init();
 	m_sortAlgorithm = std::move(sortAlgorithm);
 	m_sortAlgorithm->sort(m_data);
-	init();
+	prepareTextStats();
 
 	while (m_window->isOpen())
 	{
@@ -70,6 +75,36 @@ void SfmlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 void SfmlApplication::init()
 {
 	m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(static_cast<unsigned int>(kWindowWidth), static_cast<unsigned int>(kWindowHeight)), "Sorting Visualization");
+	
+	std::cout << "current directory: " << std::filesystem::current_path() << "\n";
+	if (!m_font.loadFromFile("fonts/Arial.ttf"))
+	{
+		std::cout << "Error loading font.\n";
+		return;
+	}
+	
+	m_text.setFont(m_font);
+}
+
+void SfmlApplication::prepareTextStats()
+{
+	std::ostringstream oss;
+	oss << m_sortAlgorithm->getName() <<
+		": Total comparisons: " <<
+		m_sortAlgorithm->getTotalComparisonOperations() <<
+		", total moves: " <<
+		m_sortAlgorithm->getTotalMoveOperations() <<
+		" (" <<
+		m_sortAlgorithm->getTotalOperations() <<
+		" operations in total).";
+	std::string text = oss.str();
+
+	m_text.setString(text);
+	m_text.setCharacterSize(18);
+	m_text.setFillColor(sf::Color::White);
+	sf::FloatRect bounds = m_text.getLocalBounds();
+	// why can't we have a centered text?
+	m_text.setPosition(kWindowWidth - bounds.width - 50.f, 0.f);
 }
 
 void SfmlApplication::handleEvents()
@@ -136,6 +171,7 @@ void SfmlApplication::render()
 		}
 	}
 
+	m_window->draw(m_text);
 	m_window->display();
 }
 

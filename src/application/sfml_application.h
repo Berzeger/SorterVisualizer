@@ -21,12 +21,15 @@ private:
 	void render() override;
 	void handleEvents() override;
 	void beep(int frequency, int durationMs) override;
+	void prepareTextStats();
 
 private:
 	std::unique_ptr<sf::RenderWindow> m_window;
 	sf::Clock m_deltaClock;
 	sf::SoundBuffer m_soundBuffer;
 	sf::Sound m_sound;
+	sf::Font m_font;
+	sf::Text m_text;
 
 	float m_barWidth;
 };
