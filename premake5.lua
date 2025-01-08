@@ -7,8 +7,8 @@ project "Sorter"
 	targetdir "bin/%{cfg.buildcfg}"
 
 	files { "src/**.cpp", "src/**.h" }
-	includedirs { "dependencies/SFML-2.6.2/include", "dependencies/SDL-2.30.10/include" }
-	libdirs { "dependencies/SFML-2.6.2/lib", "dependencies/SDL-2.30.10/lib/x64" }
+	includedirs { "dependencies/SFML-3.0.0/include", "dependencies/SDL-2.30.10/include" }
+	libdirs { "dependencies/SFML-3.0.0/lib", "dependencies/SDL-2.30.10/lib/x64" }
 	links { "SDL2.lib", "SDL2_ttf.lib", "SDL2main.lib", "SDL2test.lib" }
 
 	filter "system:windows"
@@ -26,10 +26,10 @@ project "Sorter"
 		links { "sfml-graphics-d.lib", "sfml-window-d.lib", "sfml-system-d.lib", "sfml-audio-d.lib" }
 		postbuildcommands
 		{	
-			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-graphics-d-2.dll bin/%{cfg.buildcfg}" },
-			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-system-d-2.dll bin/%{cfg.buildcfg}" },			
-			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-window-d-2.dll bin/%{cfg.buildcfg}" },
-			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-audio-d-2.dll bin/%{cfg.buildcfg}" }
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-graphics-d-3.dll bin/%{cfg.buildcfg}" },
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-system-d-3.dll bin/%{cfg.buildcfg}" },			
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-window-d-3.dll bin/%{cfg.buildcfg}" },
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-audio-d-3.dll bin/%{cfg.buildcfg}" }
 		}
 
 	filter "configurations:Release"
@@ -40,8 +40,8 @@ project "Sorter"
 		links { "sfml-graphics.lib", "sfml-window.lib", "sfml-system.lib", "sfml-audio.lib" }
 		postbuildcommands
 		{	
-			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-graphics-2.dll bin/%{cfg.buildcfg}" },
-			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-system-2.dll bin/%{cfg.buildcfg}" },			
-			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-window-2.dll bin/%{cfg.buildcfg}" },
-			{ "{COPY} dependencies/SFML-2.6.2/bin/sfml-audio-2.dll bin/%{cfg.buildcfg}" }
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-graphics-3.dll bin/%{cfg.buildcfg}" },
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-system-3.dll bin/%{cfg.buildcfg}" },			
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-window-3.dll bin/%{cfg.buildcfg}" },
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-audio-3.dll bin/%{cfg.buildcfg}" }
 		}

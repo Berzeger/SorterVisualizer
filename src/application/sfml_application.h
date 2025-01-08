@@ -24,12 +24,13 @@ private:
 	void prepareTextStats();
 
 private:
-	std::unique_ptr<sf::RenderWindow> m_window;
+	sf::RenderWindow m_window;
 	sf::Clock m_deltaClock;
 	sf::SoundBuffer m_soundBuffer;
-	sf::Sound m_sound;
 	sf::Font m_font;
-	sf::Text m_text;
+
+	std::optional<sf::Sound> m_sound;
+	std::optional<sf::Text> m_text;
 
 	float m_barWidth;
 };

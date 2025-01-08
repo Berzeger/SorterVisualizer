@@ -5,11 +5,6 @@
 #include <cmath>
 #include <chrono>
 #include <thread>
-#include <filesystem>
-#include "../sorting_algorithms/bubble_sort.h"
-#include "../sorting_algorithms/quick_sort.h"
-#include "../sorting_algorithms/insertion_sort.h"
-#include "../sorting_algorithms/merge_sort.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -20,9 +15,7 @@ const float kWindowWidth = 800.f;
 const int kDrawInterval = 10;
 
 SfmlApplication::SfmlApplication() :
-	m_window(),
-	m_text(),
-	m_font()
+	m_window()
 {
 	m_timeSinceLastDraw = 0.f;
 	m_currentSnapshotIndex = 0;
@@ -62,9 +55,13 @@ void SfmlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 	init();
 	m_sortAlgorithm = std::move(sortAlgorithm);
 	m_sortAlgorithm->sort(m_data);
-	prepareTextStats();
 
-	while (m_window->isOpen())
+	if (m_text) 
+	{
+		prepareTextStats();
+	}
+
+	while (m_window.isOpen())
 	{
 		handleEvents();
 		update();
@@ -74,16 +71,17 @@ void SfmlApplication::run(std::unique_ptr<SortingAlgorithm> sortAlgorithm)
 
 void SfmlApplication::init()
 {
-	m_window = std::make_unique<sf::RenderWindow>(sf::VideoMode(static_cast<unsigned int>(kWindowWidth), static_cast<unsigned int>(kWindowHeight)), "Sorting Visualization");
+	m_window.create(sf::VideoMode({ static_cast<unsigned int>(kWindowWidth), static_cast<unsigned int>(kWindowHeight) }),
+		"Sorting Visualization",
+		sf::State::Windowed);
 	
-	std::cout << "current directory: " << std::filesystem::current_path() << "\n";
-	if (!m_font.loadFromFile("fonts/Arial.ttf"))
+	if (!m_font.openFromFile("fonts/Arial.ttf"))
 	{
 		std::cout << "Error loading font.\n";
 		return;
 	}
 	
-	m_text.setFont(m_font);
+	m_text = std::make_optional<sf::Text>(m_font);
 }
 
 void SfmlApplication::prepareTextStats()
@@ -99,22 +97,21 @@ void SfmlApplication::prepareTextStats()
 		" operations in total).";
 	std::string text = oss.str();
 
-	m_text.setString(text);
-	m_text.setCharacterSize(18);
-	m_text.setFillColor(sf::Color::White);
-	sf::FloatRect bounds = m_text.getLocalBounds();
+	m_text->setString(text);
+	m_text->setCharacterSize(18);
+	m_text->setFillColor(sf::Color::White);
+	sf::FloatRect bounds = m_text->getLocalBounds();
 	// why can't we have a centered text?
-	m_text.setPosition(kWindowWidth - bounds.width - 50.f, 0.f);
+	m_text->setPosition({ kWindowWidth - bounds.size.x - 50.f, 0.f });
 }
 
 void SfmlApplication::handleEvents()
 {
-	sf::Event event;
-	while (m_window->pollEvent(event))
+	while (const std::optional event = m_window.pollEvent())
 	{
-		if (event.type == sf::Event::Closed)
+		if (event->is<sf::Event::Closed>())
 		{
-			m_window->close();
+			m_window.close();
 		}
 	}
 }
@@ -144,7 +141,7 @@ void SfmlApplication::update()
 
 void SfmlApplication::render()
 {
-	m_window->clear(sf::Color::Black);
+	m_window.clear(sf::Color::Black);
 
 	const std::vector<std::vector<int>>& snapshots = m_sortAlgorithm->getSnapshots();
 	const std::vector<int>& data = snapshots[m_currentSnapshotIndex];
@@ -166,13 +163,17 @@ void SfmlApplication::render()
 				rectangle.setFillColor(sf::Color::White);
 			}
 
-			rectangle.setPosition(i * m_barWidth, kWindowHeight - barHeight);
-			m_window->draw(rectangle);
+			rectangle.setPosition({ i * m_barWidth, kWindowHeight - barHeight });
+			m_window.draw(rectangle);
 		}
 	}
 
-	m_window->draw(m_text);
-	m_window->display();
+	if (m_text)
+	{
+		m_window.draw(*m_text);
+	}
+
+	m_window.display();
 }
 
 void SfmlApplication::beep(int frequency, int durationMs)
@@ -181,7 +182,7 @@ void SfmlApplication::beep(int frequency, int durationMs)
 	const int amplitude = 28000;
 	const int length = (sampleRate * durationMs) / 1000;
 
-	std::vector<sf::Int16> samples(length);
+	std::vector<std::int16_t> samples(length);
 	double phaseIncrement = (2.f * M_PI * frequency) / sampleRate;
 	double phase = 0.f;
 	int fadeSamples = sampleRate / 200; // 5 ms fade, prevents crackling
@@ -206,17 +207,21 @@ void SfmlApplication::beep(int frequency, int durationMs)
 		}
 
 		double sampleValue = envelope * amplitude * std::sin(phase);
-		samples[i] = static_cast<sf::Int16>(sampleValue);
+		samples[i] = static_cast<std::int16_t>(sampleValue);
 
 		phase += phaseIncrement;
 	}
 
-	if (!m_soundBuffer.loadFromSamples(samples.data(), samples.size(), 1, sampleRate))
+	auto channelMap = std::vector<sf::SoundChannel>{
+		sf::SoundChannel::FrontLeft,
+		sf::SoundChannel::FrontRight,
+	};
+	if (!m_soundBuffer.loadFromSamples(samples.data(), samples.size(), channelMap.size(), sampleRate, channelMap))
 	{
 		std::cout << "[SFML] Failed to load sound buffer.\n";
 		return;
 	}
 
-	m_sound.setBuffer(m_soundBuffer);
-	m_sound.play();
+	m_sound = std::make_optional<sf::Sound>(m_soundBuffer);
+	m_sound->play();
 }
