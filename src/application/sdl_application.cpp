@@ -9,9 +9,11 @@ const int kDrawInterval = 10;
 SdlApplication::SdlApplication() :
 	m_window(),
 	m_renderer(),
-	m_keepWindowOpen(true),
 	m_event(),
+	m_font(),
+	m_textTexture(),
 	m_audioDeviceId(0),
+	m_keepWindowOpen(true),
 	m_timeLastFrame(0.f)
 {
 	m_timeSinceLastDraw = 0.f;

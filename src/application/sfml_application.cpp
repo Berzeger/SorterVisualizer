@@ -118,7 +118,6 @@ void SfmlApplication::handleEvents()
 
 void SfmlApplication::update()
 {
-	static bool finalDebugWritten = false;
 	float ms = m_deltaClock.restart().asMicroseconds() / 1000.f;
 	m_timeSinceLastDraw += ms;
 	std::cout << "ms = " << ms << ", m_timeSinceLastDraw = " << m_timeSinceLastDraw << "\n";

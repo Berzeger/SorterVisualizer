@@ -1,5 +1,5 @@
 workspace "Sorter"
-	configurations { "Debug", "Release" }
+	configurations { "Debug", "Release", "DebugWithAnalysis" }
 
 project "Sorter"
 	kind "ConsoleApp"
@@ -31,6 +31,22 @@ project "Sorter"
 			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-window-d-3.dll bin/%{cfg.buildcfg}" },
 			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-audio-d-3.dll bin/%{cfg.buildcfg}" }
 		}
+		
+	filter "configurations:DebugWithAnalysis"
+		defines { "DEBUG" }
+		architecture "x64"
+		symbols "On"
+		cppdialect "C++latest"
+		links { "sfml-graphics-d.lib", "sfml-window-d.lib", "sfml-system-d.lib", "sfml-audio-d.lib" }
+		postbuildcommands
+		{	
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-graphics-d-3.dll bin/%{cfg.buildcfg}" },
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-system-d-3.dll bin/%{cfg.buildcfg}" },			
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-window-d-3.dll bin/%{cfg.buildcfg}" },
+			{ "{COPY} dependencies/SFML-3.0.0/bin/sfml-audio-d-3.dll bin/%{cfg.buildcfg}" }
+		}
+		clangtidy("On")
+		runcodeanalysis("On")
 
 	filter "configurations:Release"
 		defines { "NDEBUG" }

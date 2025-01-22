@@ -33,6 +33,6 @@ private:
 	int m_audioDeviceId;
 	bool m_keepWindowOpen;
 
-	float m_timeLastFrame;
+	int m_timeLastFrame;
 	int m_barWidth;
 };
